@@ -90,9 +90,30 @@ const Base32_encode = (input) => {
     return output.join('');
 };
 
-const publicToIp6 = module.exports.publicToIp6 = (pubKey) => {
+const keyBytesToString = module.exports.keyBytesToString = (bytes) => {
+    return Base32_encode(bytes) + '.k';
+};
+
+const keyStringToBytes = module.exports.keyStringToBytes = (pubKey) => {
     if (!PUB_REGEX.test(pubKey)) { throw new Error("key does not look valid"); }
-    const keyBytes = Base32_decode(pubKey.substring(0, pubKey.length-2));
+    return Base32_decode(pubKey.substring(0, pubKey.length-2));
+};
+
+const ip6BytesToString = module.exports.ip6BytesToString = (ip6) => {
+    if (ip6.length !== 16) { throw new Error("bad length"); }
+    if (ip6[0] !== 0xfc) { throw new Error("does not begin with fc"); }
+    return ip6.toString('hex').replace(/[a-z0-f]{4}/g, (x) => (x + ':')).slice(0,-1);
+};
+
+const ip6StringToBytes = module.exports.ip6StringToBytes = (ip6Str) => {
+    if (ip6Str.length !== 39) { throw new Error("bad length"); }
+    if (!IP6_REGEX.test(ip6Str)) { throw new Error("ip addr does not begin with fc"); }
+    const hex = ip6Str.split(':').map((x) => ( new Array(5 - x.length).join('0') + x ) ).join('');
+    return new Buffer(hex, 'hex');
+};
+
+const publicToIp6 = module.exports.publicToIp6 = (pubKey) => {
+    const keyBytes = keyStringToBytes(pubKey);
     const hash1Buff = new Buffer(Crypto.createHash('sha512').update(keyBytes).digest('hex'), 'hex');
     const hash2 = Crypto.createHash('sha512').update(hash1Buff).digest('hex');
     const first16 = hash2.substring(0,32);
@@ -108,7 +129,7 @@ const privateToPublic = module.exports.privateToPublic = (privateKey) => {
         throw new Error("key must by 64 char long hex string");
     }
     const kp = Nacl.box.keyPair.fromSecretKey(new Buffer(privateKey, 'hex'));
-    return Base32_encode(kp.publicKey) + '.k';
+    return keyBytesToString(kp.publicKey);
 };
 
 const keyPair = module.exports.keyPair = () => {
