@@ -96,7 +96,9 @@ const keyBytesToString = module.exports.keyBytesToString = (bytes) => {
 };
 
 const keyStringToBytes = module.exports.keyStringToBytes = (pubKey) => {
-    if (!PUB_REGEX.test(pubKey)) { throw new Error("key does not look valid"); }
+    if (!PUB_REGEX.test(pubKey)) {
+        throw new Error("key [" + pubKey + "] does not look valid");
+    }
     return Base32_decode(pubKey.substring(0, pubKey.length-2));
 };
 
