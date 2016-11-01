@@ -1,13 +1,13 @@
 {
     "name": "cjdnskeys",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "license": "GPL-3.0+",
     "description": "Tools for manipulating cjdns public/private keys and IPv6 addresses",
     "dependencies": {
-        "tweetnacl": "~0.14.1"
+        "tweetnacl": "~0.14.3"
     },
     "devDependencies": {
-        "jshint": "~2.9.1"
+        "jshint": "~2.9.4"
     },
     "scripts": {
         "lint": "jshint --verbose --config .jshintrc --exclude-path .jshintignore .",

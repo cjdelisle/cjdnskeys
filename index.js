@@ -91,6 +91,7 @@ const Base32_encode = (input) => {
 };
 
 const keyBytesToString = module.exports.keyBytesToString = (bytes) => {
+    if (bytes.length !== 32) { throw new Error("unexpected length [" + bytes.length + "]"); }
     return Base32_encode(bytes) + '.k';
 };
 
