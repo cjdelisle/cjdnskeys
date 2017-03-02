@@ -35,4 +35,10 @@ Cjdnskeys.ip6StringToBytes("fcf5:c1ec:be67:9ad5:1f6c:f31b:5d74:37b0")
 
 Cjdnskeys.ip6BytesToString(new Buffer("fcf5c1ecbe679ad51f6cf31b5d7437b0", "hex"))
 // "fcf5:c1ec:be67:9ad5:1f6c:f31b:5d74:37b0"
+
+Cjdnskeys.parseNodeName('v19.0000.0000.0000.0863.2v6dt6f841hzhq2wsqwt263w2dswkt6fz82vcyxqptk88mtp8y50.k')
+// { v: 19,
+//   path: '0000.0000.0000.0863',
+//   key: '2v6dt6f841hzhq2wsqwt263w2dswkt6fz82vcyxqptk88mtp8y50.k' }
+
 ```

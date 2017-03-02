@@ -152,3 +152,17 @@ const validate = module.exports.validate = (x) => {
     if (PUB_REGEX.test(x)) { return validate(publicToIp6(x)); }
     return IP6_REGEX.test(x);
 };
+
+const parseNodeName = module.exports.parseNodeName = (name) => {
+    let ver;
+    let path;
+    let key;
+    const ret = name.replace(/^v([0-9]+)\.([0-9a-f\.]{19})\.([^.]{52}).k$/, (all, a, b, c) => {
+        ver = Number(a);
+        path = b;
+        key = c + '.k';
+        return '';
+    });
+    if (ret !== '') { throw new Error("failed to parse node name [" + name + "]"); }
+    return { v: ver, path: path, key: key };
+};
