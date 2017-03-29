@@ -1,3 +1,4 @@
+/*@flow*/
 /* vim: set expandtab ts=4 sw=4: */
 /*
  * You may redistribute this program and/or modify it under the terms of
@@ -90,32 +91,32 @@ const Base32_encode = (input) => {
     return output.join('');
 };
 
-const keyBytesToString = module.exports.keyBytesToString = (bytes) => {
+const keyBytesToString = module.exports.keyBytesToString = (bytes /*:Uint8Array*/) => {
     if (bytes.length !== 32) { throw new Error("unexpected length [" + bytes.length + "]"); }
     return Base32_encode(bytes) + '.k';
 };
 
-const keyStringToBytes = module.exports.keyStringToBytes = (pubKey) => {
+const keyStringToBytes = module.exports.keyStringToBytes = (pubKey /*:string*/) => {
     if (!PUB_REGEX.test(pubKey)) {
         throw new Error("key [" + pubKey + "] does not look valid");
     }
     return Base32_decode(pubKey.substring(0, pubKey.length-2));
 };
 
-const ip6BytesToString = module.exports.ip6BytesToString = (ip6) => {
+const ip6BytesToString = module.exports.ip6BytesToString = (ip6 /*:string*/) => {
     if (ip6.length !== 16) { throw new Error("bad length"); }
     if (ip6[0] !== 0xfc) { throw new Error("does not begin with fc"); }
     return ip6.toString('hex').replace(/[a-z0-f]{4}/g, (x) => (x + ':')).slice(0,-1);
 };
 
-const ip6StringToBytes = module.exports.ip6StringToBytes = (ip6Str) => {
+const ip6StringToBytes = module.exports.ip6StringToBytes = (ip6Str /*:string*/) => {
     if (ip6Str.length !== 39) { throw new Error("bad length"); }
     if (!IP6_REGEX.test(ip6Str)) { throw new Error("ip addr does not begin with fc"); }
     const hex = ip6Str.split(':').map((x) => ( new Array(5 - x.length).join('0') + x ) ).join('');
     return new Buffer(hex, 'hex');
 };
 
-const publicToIp6 = module.exports.publicToIp6 = (pubKey) => {
+const publicToIp6 = module.exports.publicToIp6 = (pubKey /*:string*/) => {
     const keyBytes = keyStringToBytes(pubKey);
     const hash1Buff = new Buffer(Crypto.createHash('sha512').update(keyBytes).digest('hex'), 'hex');
     const hash2 = Crypto.createHash('sha512').update(hash1Buff).digest('hex');
@@ -127,7 +128,7 @@ const publicToIp6 = module.exports.publicToIp6 = (pubKey) => {
     return out.join(':');
 };
 
-const privateToPublic = module.exports.privateToPublic = (privateKey) => {
+const privateToPublic = module.exports.privateToPublic = (privateKey /*:string*/) => {
     if (typeof(privateKey) !== 'string' || !PRIV_REGEX.test(privateKey)) {
         throw new Error("key must by 64 char long hex string");
     }
@@ -147,13 +148,13 @@ const keyPair = module.exports.keyPair = () => {
     }
 };
 
-const validate = module.exports.validate = (x) => {
+const validate = module.exports.validate = (x /*:string*/) => {
     if (PRIV_REGEX.test(x)) { return validate(privateToPublic(x)); }
     if (PUB_REGEX.test(x)) { return validate(publicToIp6(x)); }
     return IP6_REGEX.test(x);
 };
 
-const parseNodeName = module.exports.parseNodeName = (name) => {
+const parseNodeName = module.exports.parseNodeName = (name /*:string*/) => {
     let ver;
     let path;
     let key;
