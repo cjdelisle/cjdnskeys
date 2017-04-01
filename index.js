@@ -91,7 +91,7 @@ const Base32_encode = (input) => {
     return output.join('');
 };
 
-const keyBytesToString = module.exports.keyBytesToString = (bytes /*:Uint8Array*/) => {
+const keyBytesToString = module.exports.keyBytesToString = (bytes /*:Buffer*/) => {
     if (bytes.length !== 32) { throw new Error("unexpected length [" + bytes.length + "]"); }
     return Base32_encode(bytes) + '.k';
 };
@@ -103,7 +103,7 @@ const keyStringToBytes = module.exports.keyStringToBytes = (pubKey /*:string*/) 
     return Base32_decode(pubKey.substring(0, pubKey.length-2));
 };
 
-const ip6BytesToString = module.exports.ip6BytesToString = (ip6 /*:string*/) => {
+const ip6BytesToString = module.exports.ip6BytesToString = (ip6 /*:Buffer*/) => {
     if (ip6.length !== 16) { throw new Error("bad length"); }
     if (ip6[0] !== 0xfc) { throw new Error("does not begin with fc"); }
     return ip6.toString('hex').replace(/[a-z0-f]{4}/g, (x) => (x + ':')).slice(0,-1);
