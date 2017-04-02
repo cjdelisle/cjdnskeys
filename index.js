@@ -155,9 +155,9 @@ const validate = module.exports.validate = (x /*:string*/) => {
 };
 
 const parseNodeName = module.exports.parseNodeName = (name /*:string*/) => {
-    let ver;
-    let path;
-    let key;
+    let ver = '';
+    let path = '';
+    let key = '';
     const ret = name.replace(/^v([0-9]+)\.([0-9a-f\.]{19})\.([^.]{52}).k$/, (all, a, b, c) => {
         ver = Number(a);
         path = b;
