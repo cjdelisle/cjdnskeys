@@ -155,7 +155,7 @@ const validate = module.exports.validate = (x /*:string*/) => {
 };
 
 const parseNodeName = module.exports.parseNodeName = (name /*:string*/) => {
-    let ver = '';
+    let ver = -1;
     let path = '';
     let key = '';
     const ret = name.replace(/^v([0-9]+)\.([0-9a-f\.]{19})\.([^.]{52}).k$/, (all, a, b, c) => {
@@ -164,6 +164,6 @@ const parseNodeName = module.exports.parseNodeName = (name /*:string*/) => {
         key = c + '.k';
         return '';
     });
-    if (ret !== '') { throw new Error("failed to parse node name [" + name + "]"); }
+    if (ver === -1) { throw new Error("failed to parse node name [" + name + "]"); }
     return { v: ver, path: path, key: key };
 };
